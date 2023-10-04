@@ -1,0 +1,58 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>{% block title %}{% endblock %}</title>
+    <link href="{% static 'css/base.css' %}" rel="stylesheet">
+</head>
+
+<body>
+    <div id="header">
+        <span class="logo">BasselWebSite</span>
+        <ul class="menu">
+            {% if section == 'dashboard' %}
+            <li class="selected">{%endif%}
+                <a href="{% url 'dashboard' %}">My dashboard</a>
+            </li>
+            {%if section == 'images'%}
+            <li class="selected">{% endif %}
+                <a href="#">Images</a>
+            </li>
+
+            {% if section == 'people' %}
+            <li class="selected">{% endif %}
+                <a href="#">People</a>
+            </li>
+        </ul>
+
+        <span class="user">
+            {% if request.user.is_authenticated %}
+            Hello {{ request.user.username }},
+            <a href="{% url 'logout' %}">Logout</a><br>
+            <a href=" {% url 'password_change' %}">ChangeMYPassword</a>
+            {% else %}
+            <a href="{% url 'login' %}">Log-in</a>
+            <a href="{% url 'register'%}">Sign-Up</a>
+            {% endif %}
+        </span>
+
+    </div>
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li class="{{ message.tags }}">
+            {{ message|safe }}
+            <a href="#" class="close">x</a>
+        </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    <div id="content">
+        {% block content %}
+        {% endblock %}
+    </div>
+</body>
+
+</html>
