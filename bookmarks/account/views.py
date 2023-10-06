@@ -59,6 +59,7 @@ def signUp(request):
     return render(request, 'account/signUp.html',{'form':form})
 
 def register(request):
+    
     if request.method == "POST":
         user_form = UserRegistrationForm(request.POST)
         if user_form.is_valid():
@@ -66,10 +67,11 @@ def register(request):
             # Set the chosen password for security =>handle hashing password
 
             new_user.set_password(user_form.cleaned_data['password'])
-
+            
             new_user.save()
-            #new profile
             Profile.objects.create(user=new_user)
+            #new profile
+            
 
             return render(request,'account/register_done.html',{'new_user':new_user})
         
@@ -78,6 +80,9 @@ def register(request):
         # code below beacase dont register exist user 
         if request.user.is_authenticated:
             return render(request,'account/dashboard.html')
+        
+
+
         user_form = UserRegistrationForm()
         return render(request,'account/register.html',{'user_form':user_form})
 
@@ -99,6 +104,3 @@ def edit(request):
     profile_form = ProfileEditForm(instance=request.user.profile)
 
  return render(request,'account/edit.html',{'user_form': user_form, 'profile_form': profile_form})
-
-
-
